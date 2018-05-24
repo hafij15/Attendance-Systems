@@ -29,8 +29,16 @@
             </div>
             
             <div class="form-group">
-               <label for="price">Roll</label>
+               <label for="">Roll</label>
                <input type="text" class="form-control" name="roll" id="roll" required>
+             </div>
+			 <div class="form-group">
+               <label for="fromDate">From Date</label>
+               <input type="date" class="form-control" name="fromDate" id="fromDate" required>
+             </div>
+			 <div class="form-group">
+               <label for="fromDate">To Date</label>
+               <input type="date" class="form-control" name="toDate" id="toDate" required>
              </div>
              <button class="btn btn-primary" id="ajaxSubmit" type="submit">Submit</button>
           </form>		  
@@ -52,10 +60,22 @@
 					
 				if ($('#class').val()==""){
 					alert("Class can't be empty!")
+					$('class').focus();
 					return false;
 				}                     
 				if ($('#roll').val()==""){
 					alert("Roll can't be empty!")
+					$('#roll').focus();
+					return false;
+				}
+				if ($('#fromDate').val()==""){
+					alert("Date can't be empty!")
+					$('#fromDate').focus();
+					return false;
+				}
+				if ($('#toDate').val()==""){
+					alert("Date can't be empty!")
+					$('#toDate').focus();
 					return false;
 				}
 								
@@ -73,6 +93,8 @@
 					data: {
 						class: $('#class').val(),                        
 						roll: $('#roll').val(),                       
+						fromDate: $('#fromDate').val(),                       
+						toDate: $('#toDate').val(),                       
 					},
 					success: function(result){
 						console.log(result)                      

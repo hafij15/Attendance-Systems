@@ -20,10 +20,21 @@ class AttendenceController extends Controller
         $result->subject = $request->subject;
         $result->roll = $request->roll;
         $result->date = $request->date;
-        $result->attendence = $request->attendence;   
-        $result->save();       
-        return response()->json(['success'=>'Attendence Information has been Saved!']);       
-        
+        $result->attendence = $request->attendence;  
+        $resultData = $result->select('class', 'subject', 'roll', 'date', 'attendence')
+        ->where([
+            ['class', '=',  $result->class],
+            ['subject', '=',  $result->subject ], 
+            ['roll', '=',  $result->roll ], 
+            ['date', '=',  $result->date ], 
+            ['attendence', '=',  $result->attendence ], 
+        ])->count();  
+        if($resultData>0)  {
+            return response()->json(['success'=>'Duplicate Entry!!!']);            
+        } else {            
+            $result->save();       
+            return response()->json(['success'=>'Attendence Information has been Saved!']);
+        }        
     }
 
     public function attendenceReport(Request $request)
@@ -31,13 +42,12 @@ class AttendenceController extends Controller
         $result = new Attendence();
         $result->class = $request->class;       
         $result->roll = $request->roll;
+        
         $result = $result->select('class', 'subject', 'roll', 'date', 'attendence')
         ->where([
             ['class', '=',  $result->class],
             ['roll', '=',  $result->roll ], 
-        ])->get();     
-        
-        
+        ])->whereBetween('date', [$request->fromDate, $request->toDate])->get();         
         $response = "<table id='example' class='table table-striped table-bordered' cellspacing='0' width='100%'>
             <thead>
                 <tr>
@@ -60,7 +70,7 @@ class AttendenceController extends Controller
              };
                
          $response .= "</tbody>
-        </table>";
+            </table>";
         // return response()->json($response);   
         return response()->json(['success'=>$response]);
         // return view('attendence_report');

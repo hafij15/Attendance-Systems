@@ -15,6 +15,7 @@
         <h3 class="text-center">Student Attendence Form</h3><hr>       
         <div class="text-right"> <a href="{{ url('/') }}" >Home</a> | <a href="{{ url('/attendence-report') }}" >Attendence Report</a></div>
         <div class="alert alert-success" style="display:none"></div>
+        <div class="alert alert-danger" style="display:none"></div>
         <div class="col-md-8">
         
          <form id="myForm" method="post">
@@ -37,8 +38,8 @@
              </select>
             </div>
             <div class="form-group">
-               <label for="price">Roll</label>
-               <input type="text" class="form-control" name="roll" id="roll" required>
+               <label for="roll">Roll</label>
+               <input type="number" class="form-control" name="roll" id="roll" required>
              </div>
              <div class="form-group">
                <label for="price">Date</label>
@@ -69,14 +70,17 @@
                     
                      if ($('#class').val()==""){
                          alert("Class can't be empty!")
+                         $('#class').focus();
                          return false;
                      }
                      if ($('#subject').val()==""){
                          alert("Subject can't be empty!")
+                         $('#subject').focus();
                          return false;
                      }
                      if ($('#roll').val()==""){
                          alert("Roll can't be empty!")
+                         $('#roll').focus();
                          return false;
                      }
                                   
@@ -97,17 +101,24 @@
                         subject: $('#subject').val(),
                         roll: $('#roll').val(),
                         date: $('#date').val(),
-                        attendence: $('#attendence').val(),
+                        attendence: $("input[name='attendence']:checked"). val(),
                     },
                     success: function(result){
                         console.log(result)
-                        $("#myForm")[0].reset();
-                        $('.alert').show();
-                        $('.alert').html(result.success)
-                       
-                        setTimeout(function() {                            
-                            $('.alert').html(result.success).fadeOut('fast');
-                        }, 5000); // <-- time in milliseconds
+                        if(result.success=='Duplicate Entry!!!'){
+                            $('.alert-danger').show();
+                            $('.alert-danger').html(result.success)
+                        }else{
+                            $("#myForm")[0].reset();
+                            $('.alert-success').show();
+                            $('.alert-success').html(result.success)
+                        
+                            setTimeout(function() {                            
+                                $('.alert').html(result.success).fadeOut('fast');
+                            }, 5000); // <-- time in milliseconds
+                        }
+                        
+                                              
                         
                     }
                              
