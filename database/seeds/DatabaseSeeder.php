@@ -11,14 +11,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        {
-         $user = factory(App\User::class)->create([
-             'username' => 'Hafij',
-             'email' => 'hafij.sabuj@gmail.com',
-             'password' => bcrypt('admin'),
-             'lastname' => 'Hafijur',
-             'firstname' => 'Rahman'
-         ]);
-    }
-    }
+        $this->call([
+        AdminSeeder::class,
+    ]);	 
+	}
 }
